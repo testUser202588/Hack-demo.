@@ -1,0 +1,129 @@
+<html>
+<head>
+    <title>TEST KİLİTLENDİ!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        body {
+            background-color: black;
+            color: red;
+            text-align: center;
+            font-family: monospace;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        h1 {
+            font-size: 40px;
+            animation: blink 1s infinite;
+        }
+        p {
+            font-size: 20px;
+            color: white;
+        }
+        #inputCode {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 18px;
+            background-color: #333;
+            color: white;
+            border: 2px solid red;
+        }
+        #restartAnim {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            color: white;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <h1>TELEFONUN HACKLENDİ!</h1>
+    <p>Beni ne kadar tanıyorsun? Çıkmak için kodu gir!</p>
+    <input type="text" id="inputCode" placeholder="Kodu gir">
+    <div id="restartAnim">Telefon yeniden başlatılıyor...</div>
+
+    <script>
+        const secretCode = "dediğin olsun"; // Çıkış kodu
+
+        // Tam ekran moduna geç
+        document.documentElement.requestFullscreen();
+
+        // Yeniden başlatma animasyonu
+        function fakeRestart() {
+            const restartDiv = document.getElementById("restartAnim");
+            restartDiv.style.display = "flex";
+            setTimeout(() => {
+                restartDiv.style.display = "none";
+                resetScreen();
+            }, 3000); // 3 saniye animasyon
+        }
+
+        // Ekranı sıfırla
+        function resetScreen() {
+            document.body.innerHTML = "<h1>TELEFONUN HACKLENDİ!</h1><p>Yeniden başlatma başarısız, beni tanıyor musun? Kodu gir!</p><input type='text' id='inputCode' placeholder='Kodu gir'><div id='restartAnim'>Telefon yeniden başlatılıyor...</div>";
+            showInput();
+        }
+
+        // Kod giriş ekranını göster
+        function showInput() {
+            const input = document.getElementById("inputCode");
+            input.focus();
+            input.addEventListener("keyup", function(event) {
+                if (event.key === "Enter") {
+                    checkCode(input.value);
+                }
+            });
+            // Sürekli odaklanmayı zorla
+            setInterval(() => input.focus(), 500);
+        }
+
+        // Kodu kontrol et
+        function checkCode(code) {
+            if (code === secretCode) {
+                document.body.innerHTML = "<h1 style='color: green;'>Küçük bir Ramazan şakası ama dikkatli ol 😂</h1>";
+                document.exitFullscreen();
+            } else {
+                fakeRestart();
+                setTimeout(() => alert("Yanlış kod! Çıkamazsın!"), 3100);
+            }
+        }
+
+        // İlk açılışta kod girişini göster
+        showInput();
+
+        // Geri tuşunu zorlaştır
+        window.onbeforeunload = function() {
+            fakeRestart();
+            return "Çıkamazsın, beni tanıyor musun?";
+        };
+
+        // Ekran değişimini izle
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                fakeRestart();
+                alert("Çıkmaya çalışma, kilitli!");
+            }
+        });
+
+        // Klavye kısayollarını engelle
+        document.addEventListener("keydown", function(e) {
+            if (e.key === "Escape" || e.key === "F11" || (e.ctrlKey && e.key === "w")) {
+                e.preventDefault();
+                fakeRestart();
+                alert("Kısayollar kilitli, kodu gir!");
+            }
+        });
+    </script>
+</body>
+</html>
